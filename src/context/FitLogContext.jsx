@@ -17,7 +17,6 @@ export function FitLogProvider({ children }) {
     if (storedSaved) setSavedItems(JSON.parse(storedSaved));
   }, []);
 
-
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(''), 3000);
@@ -31,9 +30,9 @@ export function FitLogProvider({ children }) {
       const updated = [...planItems, workout];
       setPlanItems(updated);
       localStorage.setItem('fitlog_plan', JSON.stringify(updated));
-      showToast('Added to today\'s plan');
+      showToast("Added to today's plan");
     } else {
-      showToast('Already in today\'s plan');
+      showToast("Already in today's plan");
     }
   };
 
@@ -45,10 +44,32 @@ export function FitLogProvider({ children }) {
       const updated = [...savedItems, workout];
       setSavedItems(updated);
       localStorage.setItem('fitlog_saved', JSON.stringify(updated));
-      showToast('Saved for later');
+      showToast("Saved for later");
     } else {
-      showToast('Already saved');
+      showToast("Already saved");
     }
+  };
+
+
+  const removeFromPlan = (id) => {
+    const updated = planItems.filter(item => (item.id || item._id) !== id);
+    setPlanItems(updated);
+    localStorage.setItem('fitlog_plan', JSON.stringify(updated));
+    showToast("Removed from plan");
+  };
+
+
+  const removeFromSaved = (id) => {
+    const updated = savedItems.filter(item => (item.id || item._id) !== id);
+    setSavedItems(updated);
+    localStorage.setItem('fitlog_saved', JSON.stringify(updated));
+    showToast("Removed from saved");
+  };
+
+
+  const markAsDone = (id) => {
+    removeFromPlan(id);
+    showToast("Workout completed! Excellent!");
   };
 
   return (
@@ -57,6 +78,9 @@ export function FitLogProvider({ children }) {
       savedItems,
       addToPlan,
       saveForLater,
+      removeFromPlan,
+      removeFromSaved,
+      markAsDone,
       planCount: planItems.length,
       savedCount: savedItems.length
     }}>

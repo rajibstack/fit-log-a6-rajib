@@ -33,7 +33,7 @@ export default function Hero() {
 
 
             <h1 className={`${oswald.className} text-4xl sm:text-5xl lg:text-[54px] font-bold text-white leading-[1.08] tracking-tight uppercase`}>
-              TRAIN WITH INTENT. <br className="hidden sm:inline" />
+              TRAIN WITH INTENT.
               LOG EVERY SET.
             </h1>
 
