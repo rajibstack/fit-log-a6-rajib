@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import { FitLogProvider } from "@/context/FitLogContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,16 +21,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-[#0C0D10] text-white">
-        <Navbar planCount={0} savedCount={0} />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
+        <FitLogProvider>
+          <Navbar />
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+        </FitLogProvider>
       </body>
     </html>
   );

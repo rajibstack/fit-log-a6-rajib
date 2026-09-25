@@ -5,16 +5,17 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { Oswald } from 'next/font/google';
-
+import { useFitLog } from '@/context/FitLogContext';
 
 const oswald = Oswald({
   subsets: ['latin'],
   weight: ['700'],
 });
 
-export default function Navbar({ planCount = 0, savedCount = 0 }) {
+export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { planCount, savedCount } = useFitLog();
 
   const navLinks = [
     { name: 'Workouts', path: '/' },
@@ -61,7 +62,6 @@ export default function Navbar({ planCount = 0, savedCount = 0 }) {
 
 
         <div className="hidden md:flex items-center gap-4">
-
           <Link
             href="/my-plan"
             className="flex items-center gap-2 text-sm text-gray-300 font-medium hover:text-white transition-colors"
@@ -71,7 +71,6 @@ export default function Navbar({ planCount = 0, savedCount = 0 }) {
               {planCount}
             </span>
           </Link>
-
 
           <Link
             href="/my-plan"
