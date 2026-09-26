@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { Oswald } from 'next/font/google';
 import { useFitLog } from '@/context/FitLogContext';
+import toast from 'react-hot-toast';
 
 const oswald = Oswald({
   subsets: ['latin'],
@@ -13,7 +14,7 @@ const oswald = Oswald({
 
 export default function WorkoutDetailPage() {
   const params = useParams();
-  const { id } = params;
+  const id = params?.id;
   const { addToPlan, saveForLater } = useFitLog();
 
   const [workout, setWorkout] = useState(null);
@@ -40,6 +41,19 @@ export default function WorkoutDetailPage() {
     if (id) fetchWorkoutDetail();
   }, [id]);
 
+
+  const handleAddToPlan = () => {
+    if (workout) {
+      addToPlan(workout);
+    }
+  };
+
+  const handleSaveForLater = () => {
+    if (workout) {
+      saveForLater(workout);
+    }
+  };
+
   if (loading) {
     return (
       <div className="max-w-[1232px] mx-auto px-4 md:px-6 py-12">
@@ -64,7 +78,6 @@ export default function WorkoutDetailPage() {
     );
   }
 
-
   const name = workout.name || workout.title || 'HOLLOW-BODY PLANK';
   const description = workout.description || 'A braced plank variation that trains anti-extension through the entire anterior core.';
   const equipment = workout.equipment || workout.equipments || 'Bodyweight';
@@ -72,17 +85,16 @@ export default function WorkoutDetailPage() {
   const sets = workout.sets || 3;
   const reps = workout.reps || '30-45s';
   const duration = workout.duration ? (typeof workout.duration === 'number' ? `${workout.duration} min` : workout.duration) : '10 min';
-  const calories = workout.calories || workout.kcal ? (typeof (workout.calories || workout.kcal) === 'number' ? `${workout.calories || workout.kcal} kcal` : workout.calories || workout.kcal) : '180 kcal';
+  const rawCal = workout.calories || workout.kcal;
+  const calories = rawCal ? (typeof rawCal === 'number' ? `${rawCal} kcal` : rawCal) : '180 kcal';
   const rating = workout.rating || '4.4';
   const imageSrc = workout.image || workout.imageUrl || workout.img || '/banner.png';
-
 
   let categories = [];
   if (Array.isArray(workout.category)) categories = workout.category;
   else if (Array.isArray(workout.categories)) categories = workout.categories;
   else if (workout.category) categories = [workout.category];
   else categories = ['CHEST', 'ARMS'];
-
 
   const instructions = workout.instructions && Array.isArray(workout.instructions) 
     ? workout.instructions 
@@ -113,7 +125,6 @@ export default function WorkoutDetailPage() {
 
         <div className="lg:col-span-6 space-y-5">
           
-
           <div>
             <h1 className={`${oswald.className} text-3xl sm:text-4xl lg:text-[40px] font-bold text-white uppercase tracking-wide mb-2 leading-tight`}>
               {name}
@@ -184,9 +195,8 @@ export default function WorkoutDetailPage() {
 
 
           <div className="pt-3 flex flex-col sm:flex-row items-center gap-3">
-
             <button
-              onClick={() => addToPlan(workout)}
+              onClick={handleAddToPlan}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#C2F800] hover:bg-[#b0e200] text-black font-extrabold text-xs uppercase tracking-wider px-5 py-3 rounded-xl transition-all cursor-pointer"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -195,9 +205,8 @@ export default function WorkoutDetailPage() {
               <span>Add to today's plan</span>
             </button>
 
-
             <button
-              onClick={() => saveForLater(workout)}
+              onClick={handleSaveForLater}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#12141B] hover:bg-[#1A1D27] border border-[#232733] text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl transition-all cursor-pointer"
             >
               <svg className="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
