@@ -5,7 +5,6 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { Oswald } from 'next/font/google';
 import { useFitLog } from '@/context/FitLogContext';
-import toast from 'react-hot-toast';
 
 const oswald = Oswald({
   subsets: ['latin'],
